@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Game
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+      <ion-label >Score:<span>0</span></ion-label>
+  </ion-item>
+  
+  <ion-card>
+    <ion-item>
+      <ion-label>Question 1</ion-label>
+      <ion-checkbox disabled="true"></ion-checkbox>
+    </ion-item>
+  
+    <ion-card-content>
+
+      <ion-row align-items-center>
+          <ion-col>
+            <ion-input value="{{question.firstNumber}}" readonly></ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-input readonly>+</ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-input value="{{question.secondNumber}}" readonly></ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-input readonly>=</ion-input>
+          </ion-col>
+          <ion-col>
+            <ion-input readonly>?</ion-input>
+          </ion-col>
+      </ion-row>
+
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-item>
+    <ion-label>Answer:</ion-label>
+    <ion-input placeholder="Enter Answer"></ion-input>
+</ion-item>
+
+<!-- <ion-row align-items-center>
+    <ion-col>
+      <ion-button color="primary" expand="full" shape="round">1</ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button color="secondary" expand="full" shape="round">2</ion-button>
+    </ion-col>
+</ion-row>
+<ion-row align-items-center>
+    <ion-col>
+      <ion-button color="tertiary" expand="full" shape="round">3</ion-button>
+    </ion-col>
+    <ion-col>
+        <ion-button color="success" expand="full" shape="round">4</ion-button>
+    </ion-col>
+</ion-row> -->
+  
+<ion-row align-items-center class="ion-padding-top">
+    <ion-col>
+      <ion-button color="danger" expand="full" shape="round" id="stopBtn">Stop</ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button color="success" expand="full" shape="round" id="startBtn" (click)="generateQuestion()" >Start</ion-button>
+    </ion-col>
+</ion-row>
+
+ 
+</ion-content>
+
+<ion-tab-bar slot="bottom">
+  <ion-tab-button tab="home">
+    <ion-icon name="logo-game-controller-b"></ion-icon>
+    <ion-label>Game</ion-label>
+  </ion-tab-button>
+  <ion-tab-button tab="contact">
+    <ion-icon name="clipboard"></ion-icon>
+    <ion-label>Leader Board</ion-label>
+  </ion-tab-button>
+  <ion-tab-button tab="settings">
+    <ion-icon name="person"></ion-icon>
+    <ion-label>Profile</ion-label>
+  </ion-tab-button>
+</ion-tab-bar>
+
