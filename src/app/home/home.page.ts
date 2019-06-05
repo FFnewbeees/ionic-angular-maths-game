@@ -3,6 +3,7 @@ import { questionItem } from '../models/question.model';
 
 
 
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -17,7 +18,9 @@ export class HomePage implements OnInit{
   interval;
   started:boolean = false;
   userInput:string;
+  //for stop time
   stop:boolean = false;
+  //for check box
   correct:boolean = false;
 
   question:questionItem = {
@@ -35,6 +38,14 @@ export class HomePage implements OnInit{
   }
 
   startGame(){
+    this.startTimer();
+
+    this.started = true;
+
+    this.generateQuestion();
+  }
+
+  startTimer(){
     this.interval = setInterval(()=> {
       if(this.time > 0){
         this.time--;
@@ -45,15 +56,17 @@ export class HomePage implements OnInit{
         this.started = false;
       }
     } ,1000)
-
-    this.started = true;
-
-    this.generateQuestion();
   }
 
   stopGame(){
     clearInterval(this.interval);
     this.stop = true;
+    
+  }
+
+  continueGame(){
+    this.stop = false;
+    this.startTimer();
     
   }
 
@@ -73,27 +86,26 @@ export class HomePage implements OnInit{
 
       this.correct = true;
 
+      //clear input area
       this.userInput = "";
 
-
-
       if(this.time > 0){
-        this.generateQuestion();
-        this.questionNumber++;
+        //set 2 sec delay
+        setTimeout(()=>{ 
+          this.generateQuestion();
+          this.questionNumber++;
+         }, 2000)
+        
       }
       else{
         //end game
-        this.stop = false;
+        this.stop = true;
+        this.started = false;
+
+
       }
-
-      
-      
-
     }
   
   }
-
-
- 
 
 }

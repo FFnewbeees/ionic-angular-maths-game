@@ -51,7 +51,8 @@
   
 <ion-row align-items-center class="ion-padding-top">
     <ion-col>
-      <ion-button color="danger" expand="full" shape="round" id="stopBtn" (click)="stopGame()">Stop</ion-button>
+      <ion-button color="danger" expand="full" shape="round" id="stopBtn" (click)="stopGame()" *ngIf="!stop">Stop</ion-button>
+      <ion-button color="danger" expand="full" shape="round" id="Continue" (click)="continueGame()" *ngIf="stop">Continue</ion-button>
     </ion-col>
     <ion-col>
       <ion-button color="success" expand="full" shape="round" id="startBtn" (click)="startGame()" *ngIf="!started" >Start</ion-button>
@@ -64,7 +65,7 @@
 </ion-content>
 
 <ion-tab-bar slot="bottom">
-  <ion-tab-button tab="home">
+  <ion-tab-button tab="home" selected="true">
     <ion-icon name="logo-game-controller-b"></ion-icon>
     <ion-label>Game</ion-label>
   </ion-tab-button>
