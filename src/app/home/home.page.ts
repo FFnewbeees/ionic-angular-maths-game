@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { questionItem } from '../models/question.model';
-
-
+import { Dialogs } from '@ionic-native/dialogs/ngx'; 
+import { AlertController} from '@ionic/angular';
 
 
 @Component({
@@ -22,6 +22,8 @@ export class HomePage implements OnInit{
   stop:boolean = false;
   //for check box
   correct:boolean = false;
+  
+  message:string;
 
   question:questionItem = {
     firstNumber:0,
@@ -29,15 +31,15 @@ export class HomePage implements OnInit{
     answer: 0
   };
 
-  constructor() {
-    
-  }
+  constructor(private dialogs:Dialogs,private alertController:AlertController) {}
 
   ngOnInit(){
     
   }
 
   startGame(){
+    this.time = 60;
+
     this.startTimer();
 
     this.started = true;
@@ -52,10 +54,14 @@ export class HomePage implements OnInit{
       }
       else{
         this.time = 0;
-        this.stop = true;
         this.started = false;
+        //some bugs here
+        this.stopGame();
+        //show dialog when game finish
+        this.showDialog();
       }
     } ,1000)
+    
   }
 
   stopGame(){
@@ -90,22 +96,60 @@ export class HomePage implements OnInit{
       this.userInput = "";
 
       if(this.time > 0){
-        //set 2 sec delay
+        //set 1 sec delay
         setTimeout(()=>{ 
           this.generateQuestion();
           this.questionNumber++;
-         }, 2000)
-        
+         }, 1000)
       }
       else{
         //end game
         this.stop = true;
         this.started = false;
-
-
       }
     }
-  
+    else{
+      //incorrect answer
+      this.message = "Incorrect!  Try Again";
+      setTimeout(()=>{ 
+        this.message = ""
+       }, 1000)
+      //clear input area
+      this.userInput = "";
+    }
+  }
+
+  async showDialog(){
+    let dialogs = await this.alertController.create({
+      header:"Congratulations",
+      subHeader:"",
+      message:"Please Enter Your Name",
+      buttons:[
+        {
+          text:'Skip',
+          role:'skip',
+          handler:data =>{
+            console.log('skiped');
+          }
+        },
+        {
+          text:'OK',
+          handler:data =>{
+            if(data != null)
+              console.log(JSON.stringify(data));
+              
+              console.log("name:" + data.username + " score:" + this.score);
+            }
+        }
+      ],
+      inputs:[
+        {
+          name:'username',
+          placeholder:"username"
+        }
+      ]     
+    });
+    await dialogs.present();
   }
 
 }

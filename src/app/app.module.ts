@@ -14,7 +14,8 @@ import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 import{ AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { HttpClientModule } from '@angular/common/http';
+import { Dialogs } from '@ionic-native/dialogs/ngx';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,12 +29,13 @@ import { HttpClientModule } from '@angular/common/http';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireDatabaseModule,
-    HttpClientModule],
+    ],
     
   
   providers: [
     StatusBar,
     SplashScreen,
+    Dialogs, 
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

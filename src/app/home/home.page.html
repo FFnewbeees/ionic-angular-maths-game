@@ -58,6 +58,11 @@
       <ion-button color="success" expand="full" shape="round" id="startBtn" (click)="startGame()" *ngIf="!started" >Start</ion-button>
       <ion-button color="success" expand="full" shape="round" id="confirmBtn" *ngIf="started" (click)="checkAnswer()">Confirm</ion-button>
     </ion-col>
+    <ion-item>
+      <ion-label>
+        {{message}}
+      </ion-label>
+    </ion-item>
 </ion-row>
 
 

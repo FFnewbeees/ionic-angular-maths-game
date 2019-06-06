@@ -1,5 +1,7 @@
 {
   "name": "my maths game",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
