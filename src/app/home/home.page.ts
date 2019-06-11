@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { questionItem } from '../models/question.model';
 import { Dialogs } from '@ionic-native/dialogs/ngx'; 
-import { AlertController} from '@ionic/angular';
-
+import { FirestoreService } from '../services/data/firestore.service';
+import { LoadingController } from '@ionic/angular';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -16,14 +17,19 @@ export class HomePage implements OnInit{
   time:number = 60;
   questionNumber:number = 1;
   interval;
+  //flag to control if still playing game
   started:boolean = false;
   userInput:string;
-  //for stop time
+  //for stop timer
   stop:boolean = false;
   //for check box
   correct:boolean = false;
   
+  playerName:string;
+
   message:string;
+
+  myDate:string;
 
   question:questionItem = {
     firstNumber:0,
@@ -31,20 +37,32 @@ export class HomePage implements OnInit{
     answer: 0
   };
 
-  constructor(private dialogs:Dialogs,private alertController:AlertController) {}
+  constructor(
+    private dialogs:Dialogs, 
+    private firestoreService:FirestoreService, 
+    private loadingCtrl:LoadingController,
+
+    private datePipe:DatePipe) {
+      let tempDate = new Date();
+      this.myDate = this.datePipe.transform(tempDate, 'yyyy-MM-dd');
+    }
 
   ngOnInit(){
-    
+    //setting up for game
+    this.score = 0;
+    this.time = 60;
+    this.questionNumber = 1;
+    this.userInput =""; 
+
   }
 
   startGame(){
-    this.time = 60;
+    this.ngOnInit();
 
     this.startTimer();
 
-    this.started = true;
-
     this.generateQuestion();
+    this.started = true;
   }
 
   startTimer(){
@@ -56,7 +74,8 @@ export class HomePage implements OnInit{
         this.time = 0;
         this.started = false;
         //some bugs here
-        this.stopGame();
+        clearInterval(this.interval);
+        this.stop = false;
         //show dialog when game finish
         this.showDialog();
       }
@@ -104,7 +123,6 @@ export class HomePage implements OnInit{
       }
       else{
         //end game
-        this.stop = true;
         this.started = false;
       }
     }
@@ -119,37 +137,41 @@ export class HomePage implements OnInit{
     }
   }
 
-  async showDialog(){
-    let dialogs = await this.alertController.create({
-      header:"Congratulations",
-      subHeader:"",
-      message:"Please Enter Your Name",
-      buttons:[
-        {
-          text:'Skip',
-          role:'skip',
-          handler:data =>{
-            console.log('skiped');
-          }
-        },
-        {
-          text:'OK',
-          handler:data =>{
-            if(data != null)
-              console.log(JSON.stringify(data));
-              
-              console.log("name:" + data.username + " score:" + this.score);
-            }
-        }
-      ],
-      inputs:[
-        {
-          name:'username',
-          placeholder:"username"
-        }
-      ]     
-    });
-    await dialogs.present();
+  async savePlayerScore(){
+    const loading = await this.loadingCtrl.create();
+
+    const playerName = this.playerName;
+    const playerScore = this.score;
+    const date = this.myDate;
+
+    this.firestoreService
+    .savePlayerScore(playerName, playerScore, date)
+    .then(
+      () => {
+        loading.dismiss();
+      },
+      error => {
+        console.error(error);
+      }
+    );
+    
+    return await loading.present();
   }
 
+  showDialog(){
+    this.dialogs.prompt(
+      'Please enter your name',  // message
+      'Congratulation',            // title
+      ['Ok','Skip'],             // buttonLabels
+      ''                 // defaultText
+  ).then(res => {
+    console.log(res);
+    this.playerName = res.input1;
+    if(this.playerName != null && res.buttonIndex == 1)
+    {
+      //store these data into firebase
+      this.savePlayerScore();
+    }
+  })
+  }
 }
