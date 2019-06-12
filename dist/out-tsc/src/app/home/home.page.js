@@ -1,16 +1,21 @@
 import * as tslib_1 from "tslib";
 import { Component } from '@angular/core';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
-import { AlertController } from '@ionic/angular';
+import { FirestoreService } from '../services/data/firestore.service';
+import { LoadingController } from '@ionic/angular';
+import { DatePipe } from '@angular/common';
 var HomePage = /** @class */ (function () {
-    function HomePage(dialogs, alertController) {
+    function HomePage(dialogs, firestoreService, loadingCtrl, datePipe) {
         this.dialogs = dialogs;
-        this.alertController = alertController;
+        this.firestoreService = firestoreService;
+        this.loadingCtrl = loadingCtrl;
+        this.datePipe = datePipe;
         this.score = 0;
-        this.time = 3;
+        this.time = 60;
         this.questionNumber = 1;
+        //flag to control if still playing game
         this.started = false;
-        //for stop time
+        //for stop timer
         this.stop = false;
         //for check box
         this.correct = false;
@@ -19,13 +24,21 @@ var HomePage = /** @class */ (function () {
             secondNumber: 0,
             answer: 0
         };
+        var tempDate = new Date();
+        this.myDate = this.datePipe.transform(tempDate, 'yyyy-MM-dd');
     }
     HomePage.prototype.ngOnInit = function () {
+        //setting up for game
+        this.score = 0;
+        this.time = 60;
+        this.questionNumber = 1;
+        this.userInput = "";
     };
     HomePage.prototype.startGame = function () {
+        this.ngOnInit();
         this.startTimer();
-        this.started = true;
         this.generateQuestion();
+        this.started = true;
     };
     HomePage.prototype.startTimer = function () {
         var _this = this;
@@ -35,8 +48,11 @@ var HomePage = /** @class */ (function () {
             }
             else {
                 _this.time = 0;
-                _this.stop = true;
                 _this.started = false;
+                //some bugs here
+                clearInterval(_this.interval);
+                _this.stop = false;
+                //show dialog when game finish
                 _this.showDialog();
             }
         }, 1000);
@@ -72,9 +88,7 @@ var HomePage = /** @class */ (function () {
             }
             else {
                 //end game
-                this.stop = true;
                 this.started = false;
-                this.showDialog();
             }
         }
         else {
@@ -87,48 +101,41 @@ var HomePage = /** @class */ (function () {
             this.userInput = "";
         }
     };
-    HomePage.prototype.showDialog = function () {
+    HomePage.prototype.addPlayerScore = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var dialogs;
-            var _this = this;
+            var loading;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.alertController.create({
-                            header: "Congratulations",
-                            subHeader: "",
-                            message: "Please Enter Your Name",
-                            buttons: [
-                                {
-                                    text: 'Skip',
-                                    role: 'skip',
-                                    handler: function (data) {
-                                        console.log('skiped');
-                                    }
-                                },
-                                {
-                                    text: 'OK',
-                                    handler: function (data) {
-                                        if (data != null)
-                                            console.log(JSON.stringify(data));
-                                        console.log("name:" + data.username + " score:" + _this.score);
-                                    }
-                                }
-                            ],
-                            inputs: [
-                                {
-                                    name: 'username',
-                                    placeholder: "username"
-                                }
-                            ]
-                        })];
+                    case 0: return [4 /*yield*/, this.loadingCtrl.create()];
                     case 1:
-                        dialogs = _a.sent();
-                        return [4 /*yield*/, dialogs.present()];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/];
+                        loading = _a.sent();
+                        this.firestoreService.addPlayerScore(this.playerName, this.score, this.myDate)
+                            .then(function (response) {
+                            console.log(response);
+                            loading.dismiss();
+                        })
+                            .catch(function (error) {
+                            console.log(error);
+                        });
+                        return [4 /*yield*/, loading.present()];
+                    case 2: return [2 /*return*/, _a.sent()];
                 }
             });
+        });
+    };
+    HomePage.prototype.showDialog = function () {
+        var _this = this;
+        this.dialogs.prompt('Please enter your name', // message
+        'Congratulation', // title
+        ['Ok', 'Skip'], // buttonLabels
+        '' // defaultText
+        ).then(function (res) {
+            console.log(res);
+            _this.playerName = res.input1;
+            if (_this.playerName != null && res.buttonIndex == 1) {
+                //store these data into firebase
+                _this.addPlayerScore();
+            }
         });
     };
     HomePage = tslib_1.__decorate([
@@ -137,7 +144,10 @@ var HomePage = /** @class */ (function () {
             templateUrl: 'home.page.html',
             styleUrls: ['home.page.scss'],
         }),
-        tslib_1.__metadata("design:paramtypes", [Dialogs, AlertController])
+        tslib_1.__metadata("design:paramtypes", [Dialogs,
+            FirestoreService,
+            LoadingController,
+            DatePipe])
     ], HomePage);
     return HomePage;
 }());

@@ -20,7 +20,7 @@ var SigninPage = /** @class */ (function () {
         this.authService.signIn(formData.email, formData.password)
             .then(function (response) {
             console.log(response);
-            _this.router.navigate(['/home']);
+            _this.router.navigate(['/tabs/home']);
         })
             .catch(function (error) {
             console.log(error);

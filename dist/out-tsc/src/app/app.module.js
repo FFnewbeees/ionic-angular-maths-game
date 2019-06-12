@@ -11,8 +11,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+//import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { DatePipe } from '@angular/common';
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -27,12 +30,15 @@ var AppModule = /** @class */ (function () {
                 //Added
                 AngularFireModule.initializeApp(environment.firebase),
                 AngularFireAuthModule,
-                AngularFireDatabaseModule,
+                //AngularFireDatabaseModule,
+                AngularFirestoreModule
             ],
             providers: [
                 StatusBar,
                 SplashScreen,
                 Dialogs,
+                AngularFirestore,
+                DatePipe,
                 { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
             ],
             bootstrap: [AppComponent]

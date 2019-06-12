@@ -140,7 +140,6 @@ export class HomePage implements OnInit{
   async addPlayerScore(){
     const loading = await this.loadingCtrl.create();
 
-    //new added
     this.firestoreService.addPlayerScore(this.playerName, this.score, this.myDate)
     .then( (response) => {
       console.log(response);

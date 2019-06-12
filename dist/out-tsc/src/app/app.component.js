@@ -3,15 +3,15 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+// import { AngularFireAuth } from '@angular/fire/auth';
+// import { Router } from '@angular/router';
+// import { AngularFirestore } from '@angular/fire/firestore';
+// import { DatePipe } from '@angular/common';
 var AppComponent = /** @class */ (function () {
-    function AppComponent(platform, splashScreen, statusBar, afAuth, router) {
+    function AppComponent(platform, splashScreen, statusBar) {
         this.platform = platform;
         this.splashScreen = splashScreen;
         this.statusBar = statusBar;
-        this.afAuth = afAuth;
-        this.router = router;
         this.initializeApp();
     }
     AppComponent.prototype.initializeApp = function () {
@@ -28,9 +28,7 @@ var AppComponent = /** @class */ (function () {
         }),
         tslib_1.__metadata("design:paramtypes", [Platform,
             SplashScreen,
-            StatusBar,
-            AngularFireAuth,
-            Router])
+            StatusBar])
     ], AppComponent);
     return AppComponent;
 }());

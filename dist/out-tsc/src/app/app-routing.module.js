@@ -2,10 +2,10 @@ import * as tslib_1 from "tslib";
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule } from '@angular/router';
 var routes = [
-    { path: '', redirectTo: 'signup', pathMatch: 'full' },
-    { path: 'home', loadChildren: './home/home.module#HomePageModule' },
+    { path: '', redirectTo: 'signin', pathMatch: 'full' },
     { path: 'signup', loadChildren: './signup/signup.module#SignupPageModule' },
     { path: 'signin', loadChildren: './signin/signin.module#SigninPageModule' },
+    { path: '', loadChildren: './tabs/tabs.module#TabsPageModule' },
 ];
 var AppRoutingModule = /** @class */ (function () {
     function AppRoutingModule() {

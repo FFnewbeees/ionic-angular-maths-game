@@ -1,9 +1,23 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>leaderboard</ion-title>
+    <ion-title>Leaderboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-list>
+    <ion-item color="secondary">
+      <ion-label>Rank</ion-label>
+      <ion-label> Name</ion-label>
+      <ion-label> Score</ion-label>
+    </ion-item>
+    <ion-item *ngFor="let scoreItem of scoreItems; let i = index">
+      <ion-label>{{i+1}}</ion-label>
+      <ion-label>{{scoreItem.playerName}} </ion-label>
+      <ion-label>{{ scoreItem.score }} Points 
+        <p>{{scoreItem.date}}</p>
+      </ion-label>
+     
+    </ion-item>
+  </ion-list>
 </ion-content>
