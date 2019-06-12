@@ -137,23 +137,20 @@ export class HomePage implements OnInit{
     }
   }
 
-  async savePlayerScore(){
+  async addPlayerScore(){
     const loading = await this.loadingCtrl.create();
 
-    const playerName = this.playerName;
-    const playerScore = this.score;
-    const date = this.myDate;
-
-    this.firestoreService
-    .savePlayerScore(playerName, playerScore, date)
-    .then(
-      () => {
-        loading.dismiss();
-      },
-      error => {
-        console.error(error);
-      }
-    );
+    //new added
+    this.firestoreService.addPlayerScore(this.playerName, this.score, this.myDate)
+    .then( (response) => {
+      console.log(response);
+      loading.dismiss();
+      
+    })
+    .catch( (error) => {
+      console.log(error);
+      
+    });
     
     return await loading.present();
   }
@@ -170,7 +167,7 @@ export class HomePage implements OnInit{
     if(this.playerName != null && res.buttonIndex == 1)
     {
       //store these data into firebase
-      this.savePlayerScore();
+      this.addPlayerScore();
     }
   })
   }

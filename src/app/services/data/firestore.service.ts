@@ -8,24 +8,14 @@ export class FirestoreService {
 
   constructor(private firestore:AngularFirestore ) { }
 
-  savePlayerScore(
-    playerName:string,
-    playerScore:number,
-    date:string
-    
-    ):Promise<void>{
-      const id = this.firestore.createId();
+  addPlayerScore(playerName:string, score:number, date:string){
+    return new Promise((resolve, reject) =>{
+      this.firestore.collection('scoreList').add({playerName, score, date})
+      .then( (response) => { resolve(response) })
+      .catch( (error) => {reject(error) })
+    });
+  }
 
-      return this.firestore.doc('scoreList/${id}').set({
-        id,
-        playerName,
-        playerScore,
-        date
-        
-      });
-      
-
-    }
   }
 
   
