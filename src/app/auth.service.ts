@@ -6,7 +6,9 @@ import { AngularFireAuth } from '@angular/fire/auth';
 })
 export class AuthService {
 
-  constructor(private afAuth:AngularFireAuth) { }
+
+  constructor(private afAuth:AngularFireAuth) {}
+
   signUp(email:string, password:string){
     return new Promise( (resolve, reject) =>{
       this.afAuth.auth.createUserWithEmailAndPassword(email, password)
@@ -30,4 +32,10 @@ export class AuthService {
       .catch( (error) => {reject(error) });
     });
   }
+
+  getUserEmail(){
+   return this.afAuth.auth.currentUser.email;
+    
+  }
+
 }
