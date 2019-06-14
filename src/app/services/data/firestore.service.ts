@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-
-
-
+import { resolve } from 'url';
+import { reject } from 'q';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +17,7 @@ export class FirestoreService {
       .catch( (error) => {reject(error) })
     });
   }
+
 
   }
 

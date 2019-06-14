@@ -38,4 +38,8 @@ export class AuthService {
     
   }
 
+  getUser(){
+    return this.afAuth.auth.currentUser;
+  }
+
 }

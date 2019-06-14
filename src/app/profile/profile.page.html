@@ -8,9 +8,14 @@
     <ion-card>
         <ion-item>
             <ion-thumbnail slot="start">
-                <!-- <ion-img [src]="item.src"></ion-img> -->
-              </ion-thumbnail>
+              <ion-img [src]="(profilePictureStream | async)?.image" alt="Profile Picture"></ion-img>
+            </ion-thumbnail>
+              <ion-label for="file">Upload Profile Picture:</ion-label>
         </ion-item>
+        <ion-item>
+              <ion-input type="file" (change)="upload($event)" accept=".png,.jpg"></ion-input>
+        </ion-item>
+        
       
         <ion-card-content> 
           User Email: {{userEmail}}
