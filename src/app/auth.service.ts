@@ -33,11 +33,6 @@ export class AuthService {
     });
   }
 
-  getUserEmail(){
-   return this.afAuth.auth.currentUser.email;
-    
-  }
-
   getUser(){
     return this.afAuth.auth.currentUser;
   }

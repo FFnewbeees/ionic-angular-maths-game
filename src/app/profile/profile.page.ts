@@ -1,17 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { AngularFireStorage, AngularFireStorageReference, AngularFireUploadTask } from '@angular/fire/storage';
-import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
-import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
-
-import * as firebase from 'firebase';
-
-
-interface profilePictureUrl{
-  url1?:string;
-  url2?:string;
-} 
+import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 
 @Component({
@@ -20,27 +11,22 @@ interface profilePictureUrl{
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage implements OnInit {
-
   userEmail:string;
-  ref:AngularFireStorageReference;
-  task:AngularFireUploadTask;
-  profilePictureStream: AngularFireObject<profilePictureUrl>;
   uid:string;
+  imgSource:string;
 
   constructor(
     private authService:AuthService,
     private router:Router,
     private afStorage:AngularFireStorage,
-    private afDatabase: AngularFireDatabase,
     private firestoreService:AngularFirestore
     
-) {
-    this.profilePictureStream = this.afDatabase.object('/userProfile');
-}
+) {}
 
-  ngOnInit() {
-    //put user
-    this.userEmail= this.authService.getUserEmail();
+  ngOnInit() {  
+    this.uid = this.authService.getUser().uid;
+    this.loadProfileImage();
+    this.userEmail= this.authService.getUser().email;
 }
 
   signOut(){
@@ -50,24 +36,39 @@ export class ProfilePage implements OnInit {
   }
 
   upload(event:any){
-  //  // this.ref = this.afStorage.storage("gs://ionic-mathgame.appspot.com/");
-  //   const id = Math.random().toString(36).substring(2);
-  //   this.ref = this.afStorage.ref(id);
-  //   this.task = this.ref.put(event.target.files[0]);
+
   this.uid = this.authService.getUser().uid;
   const file:File = event.target.files[0];
   const metaData = {'contentType':file.type};
   const storageRef = '/userProfile/'+ this.uid;
-  const uploadTask = this.afStorage.upload(storageRef, file, metaData);
+  this.afStorage.upload(storageRef, file, metaData);
 
-  //this.afStorage.ref(storageRef).getDownloadURL().subscribe(url => {
     this.afStorage.ref(storageRef).getDownloadURL().subscribe(url => {
     this.firestoreService.firestore.collection('userProfile').doc(this.uid).set({
+      downloadURL: url
     });
-    
+  
   });
+ 
+  console.log("Upload Successful:" + file.name);
+  
+  }
 
-  console.log("uploading:" + file.name);
+  loadProfileImage(){
+    const ref = '/userProfile/'+ this.uid;
+    this.afStorage.ref(ref).getDownloadURL().subscribe(url => {
+    this.imgSource = url;
+    });
+  }
+
+  doRefresh(event) {
+    console.log('Begin async operation');
+
+    setTimeout(() => {
+      this.loadProfileImage();
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 1000);
   }
 
 }
