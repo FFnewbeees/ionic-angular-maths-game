@@ -14,7 +14,7 @@ import { DatePipe } from '@angular/common';
 export class HomePage implements OnInit{
 
   score:number = 0;
-  time:number = 60;
+  time:number = 90;
   questionNumber:number = 1;
   interval;
   //flag to control if still playing game
@@ -50,7 +50,7 @@ export class HomePage implements OnInit{
   ngOnInit(){
     //setting up for game
     this.score = 0;
-    this.time = 60;
+    this.time = 90;
     this.questionNumber = 1;
     this.userInput =""; 
 
@@ -158,12 +158,12 @@ export class HomePage implements OnInit{
     this.dialogs.prompt(
       'Please enter your name',  // message
       'Congratulation',            // title
-      ['Ok','Skip'],             // buttonLabels
+      ['Skip','Ok'],             // buttonLabels
       ''                 // defaultText
   ).then(res => {
     console.log(res);
     this.playerName = res.input1;
-    if(this.playerName != null && res.buttonIndex == 1)
+    if(this.playerName != null && res.buttonIndex == 2)
     {
       //store these data into firebase
       this.addPlayerScore();
