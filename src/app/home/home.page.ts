@@ -96,8 +96,8 @@ export class HomePage implements OnInit{
   }
 
   generateQuestion(){
-    this.question.firstNumber = Math.floor(Math.random() * 100) + 1;
-    this.question.secondNumber = Math.floor(Math.random() * 100) + 1;
+    this.question.firstNumber = Math.floor(Math.random() * 200) + 1;
+    this.question.secondNumber = Math.floor(Math.random() * 200) + 1;
     this.question.answer = this.question.firstNumber + this.question.secondNumber;
     this.correct = false;
     console.log(this.question.answer);
