@@ -92,7 +92,6 @@ export class HomePage implements OnInit{
   continueGame(){
     this.stop = false;
     this.startTimer();
-    
   }
 
   generateQuestion(){
@@ -119,7 +118,7 @@ export class HomePage implements OnInit{
         setTimeout(()=>{ 
           this.generateQuestion();
           this.questionNumber++;
-         }, 1000)
+         }, 500)
       }
       else{
         //end game
@@ -131,7 +130,7 @@ export class HomePage implements OnInit{
       this.message = "Incorrect!  Try Again";
       setTimeout(()=>{ 
         this.message = ""
-       }, 1000)
+       }, 500)
       //clear input area
       this.userInput = "";
     }
@@ -156,7 +155,7 @@ export class HomePage implements OnInit{
 
   showDialog(){
     this.dialogs.prompt(
-      'Please enter your name',  // message
+      'Wanna upload your score? Please enter your name',  // message
       'Congratulation',            // title
       ['Skip','Ok'],             // buttonLabels
       ''                 // defaultText

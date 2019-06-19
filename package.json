@@ -28,6 +28,7 @@
     "@ionic/angular": "^4.1.0",
     "@ionic/pro": "2.0.4",
     "angularfire2": "^5.2.1",
+    "cordova-android": "8.0.0",
     "cordova-ios": "5.0.1",
     "cordova-plugin-dialogs": "^2.0.1",
     "core-js": "^2.5.4",
@@ -80,7 +81,8 @@
       "cordova-plugin-dialogs": {}
     },
     "platforms": [
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }
